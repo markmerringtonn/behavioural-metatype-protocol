@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behavioural Metatype Protocol — Nadzim Huseinau, 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f7f5;
+    --text: #1a1a1a;
+    --text-secondary: #555550;
+    --text-tertiary: #999990;
+    --border: #e5e5e0;
+    --border-secondary: #d0d0c8;
+    --accent: #1A3A5C;
+    --accent2: #2E6DA4;
+    --accent-light: #e8f0f8;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151515;
+      --bg-secondary: #1e1e1c;
+      --text: #f0f0ec;
+      --text-secondary: #aaaaaa;
+      --text-tertiary: #666660;
+      --border: #2a2a28;
+      --border-secondary: #383836;
+      --accent: #5BA4D4;
+      --accent2: #7BBDE8;
+      --accent-light: #0d1f2e;
+    }
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  .page {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 3rem 2rem 6rem;
+  }
+
+  /* COVER */
+  .cover {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 3rem 2.5rem 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1A3A5C 0%, #2E6DA4 50%, #5BA4D4 100%);
+  }
+  .cover-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 1.25rem;
+  }
+  .cover-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2rem, 6vw, 3rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .cover-title em { font-style: italic; color: var(--text-secondary); }
+  .cover-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 500px;
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+  }
+  .cover-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+  .cover-meta-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 3px;
+  }
+  .cover-meta-value { font-size: 14px; font-weight: 500; }
+
+  /* TOC */
+  .toc {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    background: var(--bg-secondary);
+  }
+  .toc-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 1rem;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 14px;
+    padding: 5px 0;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: color 0.15s;
+    cursor: pointer;
+  }
+  .toc-item:hover { color: var(--accent2); }
+  .toc-num { font-size: 11px; font-weight: 500; color: var(--text-tertiary); min-width: 18px; }
+  .toc-dot { flex: 1; border-bottom: 0.5px dotted var(--border-secondary); }
+
+  /* ABSTRACT */
+  .abstract {
+    border-left: 3px solid var(--accent2);
+    background: var(--accent-light);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 3rem;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  /* SECTIONS */
+  .section { margin-bottom: 3rem; scroll-margin-top: 2rem; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .section-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    min-width: 22px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .subsection { margin-bottom: 1.75rem; }
+  .subsection-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.85rem;
+  }
+
+  p { margin-bottom: 1rem; }
+
+  .callout {
+    border-left: 3px solid var(--accent2);
+    background: var(--accent-light);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  ul.bullets { list-style: none; margin: 0.75rem 0 1.25rem; }
+  ul.bullets li {
+    font-size: 15px;
+    padding: 0.35rem 0 0.35rem 1.4rem;
+    position: relative;
+    border-bottom: 0.5px solid var(--border);
+  }
+  ul.bullets li:last-child { border-bottom: none; }
+  ul.bullets li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--text-tertiary);
+  }
+
+  /* ARCH FLOW */
+  .arch-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 1.25rem 0;
+    flex-wrap: wrap;
+  }
+  .arch-node {
+    flex: 1;
+    min-width: 130px;
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1rem 0.85rem;
+    text-align: center;
+    margin: 4px 0;
+  }
+  .arch-node-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .arch-node-sub { font-size: 11px; color: var(--text-tertiary); line-height: 1.4; }
+  .arch-arrow { color: var(--text-tertiary); font-size: 18px; padding: 0 6px; display: flex; align-items: center; flex-shrink: 0; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border: 0.5px solid var(--border); border-radius: var(--radius-sm); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--bg-secondary); }
+  thead th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 0.5px solid var(--border);
+  }
+  tbody tr { border-bottom: 0.5px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 10px 14px; vertical-align: top; line-height: 1.55; }
+  tbody tr:nth-child(even) td { background: var(--bg-secondary); }
+  td:first-child { color: var(--text-secondary); white-space: nowrap; }
+
+  /* PRIORITY BOX */
+  .priority-box {
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    background: var(--bg-secondary);
+    margin-top: 1.25rem;
+  }
+  .priority-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; }
+  .priority-grid { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 2rem; font-size: 14px; }
+  .pkey { color: var(--text-secondary); }
+  .pval { font-weight: 500; }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--accent-light);
+    color: var(--accent2);
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    margin-bottom: 1.25rem;
+    border: 0.5px solid var(--border);
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+
+  .footer-note {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 0.5px solid var(--border);
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 2rem 1.25rem 4rem; }
+    .cover { padding: 2rem 1.5rem 2rem; }
+    .arch-flow { flex-direction: column; }
+    .arch-arrow { transform: rotate(90deg); align-self: center; }
+    td:first-child { white-space: normal; }
+  }
+
+  @media print {
+    body { font-size: 13px; }
+    .page { padding: 0; max-width: 100%; }
+    .toc-item { cursor: default; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Conceptual Whitepaper · v1.0 · BMP</div>
+    <h1 class="cover-title">Behavioural<br><em>Metatype</em><br>Protocol</h1>
+    <p class="cover-sub">Self-sovereign behavioural identity as access infrastructure for specialised platforms</p>
+    <div class="cover-meta">
+      <div><div class="cover-meta-label">Author</div><div class="cover-meta-value">Nadzim Huseinau</div></div>
+      <div><div class="cover-meta-label">Date</div><div class="cover-meta-value">June 1, 2026</div></div>
+      <div><div class="cover-meta-label">Version</div><div class="cover-meta-value">v1.0</div></div>
+      <div><div class="cover-meta-label">Status</div><div class="cover-meta-value">Open to collaboration</div></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="toc-label">Contents</div>
+    <a class="toc-item" href="#s1"><span class="toc-num">01</span><span>The Problem</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s2"><span class="toc-num">02</span><span>Core Principle</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s3"><span class="toc-num">03</span><span>System Architecture</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s4"><span class="toc-num">04</span><span>Metatype as an Asset</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s5"><span class="toc-num">05</span><span>Example Platforms</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s6"><span class="toc-num">06</span><span>Open Questions</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s7"><span class="toc-num">07</span><span>Prior Art &amp; Status</span><span class="toc-dot"></span></a>
+    <a class="toc-item" href="#s8"><span class="toc-num">08</span><span>Authorship &amp; Priority</span><span class="toc-dot"></span></a>
+  </nav>
+
+  <!-- ABSTRACT -->
+  <div class="abstract">
+    This document establishes the concept of a protocol in which a person's digital behavioural trail — accumulated over time and cryptographically verified — becomes an access key to specialised platforms, without exposing personal data to third parties. Concept authored by Nadzim Huseinau, June 1, 2026.
+  </div>
+
+  <!-- S1 -->
+  <section class="section" id="s1">
+    <div class="section-header"><span class="section-num">01</span><h2 class="section-title">The Problem</h2></div>
+    <p>Modern digital platforms rely either on self-declaration (forms, resumes, profiles) or on behavioural data — but collected centrally, without the user's awareness, serving the platform rather than the individual.</p>
+    <p>This produces three systemic failures:</p>
+    <ul class="bullets">
+      <li>Behavioural data belongs to the platform, not the person.</li>
+      <li>Access to specialised communities is gated by self-description, which is trivially falsifiable.</li>
+      <li>Valuable closed environments (for idea generators, introverts, rare specialists) either do not exist or lack a reliable entry filter.</li>
+    </ul>
+  </section>
+
+  <!-- S2 -->
+  <section class="section" id="s2">
+    <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Core Principle</h2></div>
+    <div class="callout">A metatype is defined not by what a person does, but by the statistical stability of patterns in the space of consequences of their actions, verified across time horizons from 30 to 540 days.</div>
+    <p>The distinction is fundamental:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>What is NOT collected</th><th>What is collected instead</th></tr></thead>
+        <tbody>
+          <tr><td>"Opened an article about finance"</td><td>Changed behaviour 3 days after an informational contact</td></tr>
+          <tr><td>"Sent a message at 2am"</td><td>Chronotype of activity over 90 days — a stable pattern</td></tr>
+          <tr><td>"Visited an introvert platform"</td><td>Depth vs. breadth of social ties over 6 months</td></tr>
+          <tr><td>"Bought a physics book"</td><td>Vector of intellectual drift — direction and velocity</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Behaviour can be simulated in the short term. Consequence patterns over 6–18 months are significantly harder to fake.</p>
+  </section>
+
+  <!-- S3 -->
+  <section class="section" id="s3">
+    <div class="section-header"><span class="section-num">03</span><h2 class="section-title">System Architecture</h2></div>
+    <div class="subsection">
+      <div class="subsection-title">Data flow</div>
+      <div class="arch-flow">
+        <div class="arch-node"><div class="arch-node-title">Local Agent</div><div class="arch-node-sub">Computes vectors on device</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node"><div class="arch-node-title">ZK-Proof</div><div class="arch-node-sub">Data never leaves device</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node"><div class="arch-node-title">Blockchain L2</div><div class="arch-node-sub">Hash + timestamp only</div></div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-node"><div class="arch-node-title">Platform</div><div class="arch-node-sub">Access granted / denied</div></div>
+      </div>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Four layers</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>Local Agent</td><td>Software on the user's device. Collects signals and computes vectors locally. Raw data never leaves the device.</td></tr>
+            <tr><td>ZK-Proof</td><td>Zero-Knowledge Proof: the user proves metatype membership without revealing underlying data.</td></tr>
+            <tr><td>Blockchain (L2)</td><td>Stores only the vector hash and proof. Immutable timestamp. Platforms receive an access token via smart contract.</td></tr>
+            <tr><td>DAO Governance</td><td>Decentralised organisation governs model parameters, prevents monopolisation and algorithmic drift.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- S4 -->
+  <section class="section" id="s4">
+    <div class="section-header"><span class="section-num">04</span><h2 class="section-title">Metatype as an Asset</h2></div>
+    <p>A metatype is not a static label — it is a dynamic multi-dimensional vector formed from several signal classes:</p>
+    <ul class="bullets">
+      <li>Chronobiological pattern — stable time zones of activity</li>
+      <li>Cognitive style — depth vs. breadth of information processing</li>
+      <li>Social topology — density, depth, and speed of relationship formation</li>
+      <li>Intellectual drift vector — direction and velocity of shifting interests</li>
+      <li>Response to uncertainty — behavioural pattern in the absence of a clear answer</li>
+    </ul>
+    <p>The profile appreciates over time: the longer and richer the history, the more accurate the metatype, and the more specialised the platforms that become accessible. This creates a built-in incentive to accumulate data.</p>
+  </section>
+
+  <!-- S5 -->
+  <section class="section" id="s5">
+    <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Example Platforms</h2></div>
+    <div class="subsection">
+      <div class="subsection-title">Idea Bounty</div>
+      <p>Entry: metatype "systemic generator" (top 5% by associative breadth and conceptualisation speed). An idea is timestamped on-chain. If implemented by anyone within N years — automatic payout from the pool, regardless of the author's involvement in execution.</p>
+    </div>
+    <div class="subsection">
+      <div class="subsection-title">Platform for introverts</div>
+      <p>Entry: metatype "deep solitary" (low breadth, high depth of connections, specific chronotype). Compatibility is determined by overlap of behavioural vectors, not questionnaires. People do not describe themselves — the system sees them through their behaviour.</p>
+    </div>
+  </section>
+
+  <!-- S6 -->
+  <section class="section" id="s6">
+    <div class="section-header"><span class="section-num">06</span><h2 class="section-title">Open Questions</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Approach</th></tr></thead>
+        <tbody>
+          <tr><td>Incentive to collect data</td><td>Metatype = key to an environment otherwise inaccessible. Behavioural capital appreciates over time.</td></tr>
+          <tr><td>Agent &amp; model training</td><td>DAO structure: Core Team + Data Stewards + Model Auditors. Federated learning without centralising data.</td></tr>
+          <tr><td>Preventing manipulation</td><td>Time anchor (6–18 months), cross-validation with anonymous clusters, self-correction via platform feedback.</td></tr>
+          <tr><td>Risk of stratification</td><td>Drift vector as a separate dimension. Platforms for people at growth edges are part of the ecosystem.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- S7 -->
+  <section class="section" id="s7">
+    <div class="section-header"><span class="section-num">07</span><h2 class="section-title">Prior Art &amp; Status</h2></div>
+    <p>Existing projects cover individual aspects only:</p>
+    <ul class="bullets">
+      <li>Sovrin, Polygon ID — self-sovereign identity, without behavioural vectors</li>
+      <li>Gitcoin Passport, Orange Protocol — on-chain reputation, without psychographic metatypes</li>
+      <li>Crystal Knows, Humantic AI — behavioural analytics, without user data ownership</li>
+      <li>World ID (Worldcoin) — proof of personhood: "are you human?" but not "what kind of human are you?"</li>
+    </ul>
+    <div class="callout">The combination of local agent + consequence trail + ZK-proof of metatype + platforms gated by metatype + user ownership of profile + DAO governance — has not been implemented by any existing project as of this writing.</div>
+  </section>
+
+  <!-- S8 -->
+  <section class="section" id="s8">
+    <div class="section-header"><span class="section-num">08</span><h2 class="section-title">Authorship &amp; Priority</h2></div>
+    <div class="status-badge"><span class="badge-dot"></span>Priority record established — June 1, 2026</div>
+    <div class="priority-box">
+      <div class="priority-label">Record</div>
+      <div class="priority-grid">
+        <span class="pkey">Author</span><span class="pval">Nadzim Huseinau</span>
+        <span class="pkey">Date</span><span class="pval">June 1, 2026</span>
+        <span class="pkey">Working title</span><span class="pval">Behavioural Metatype Protocol (BMP)</span>
+        <span class="pkey">Version</span><span class="pval">v1.0 — Initial priority record</span>
+        <span class="pkey">Status</span><span class="pval">Open to collaboration</span>
+      </div>
+    </div>
+    <p class="footer-note">This document serves as the primary record of the concept to establish authorship priority. The author is open to collaboration with researchers, developers, and investors who share the vision of self-sovereign behavioural identity.</p>
+  </section>
+
+</main>
+</body>
+</html>
